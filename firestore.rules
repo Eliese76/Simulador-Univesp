@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isValidScore(data) {
+      return data.size() == 7
+        && data.userId == request.auth.uid
+        && data.userName is string && data.userName.size() <= 100
+        && data.userEmail is string && data.userEmail.size() <= 150
+        && data.score is number && data.score >= 0
+        && data.correctCount is number && data.correctCount >= 0
+        && data.totalQuestions is number && data.totalQuestions > 0
+        && data.timestamp == request.time;
+    }
+
+    match /scores/{scoreId} {
+      // Users can only create their own score
+      allow create: if isSignedIn() 
+        && isValidId(scoreId) 
+        && isValidScore(request.resource.data);
+      
+      // Scores are immutable once written (for simplicity/integrity)
+      allow update: if false;
+      
+      // Allow reading scores for the leaderboard
+      // In a real app, we might split public/private data, but for this demo:
+      allow get: if isSignedIn();
+      allow list: if isSignedIn() && request.query.limit <= 50;
+    }
+  }
+}

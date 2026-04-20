@@ -1,0 +1,25 @@
+{
+  "entities": {
+    "Score": {
+      "title": "User Quiz Score",
+      "description": "Represents a quiz result saved by a user to the leaderboard.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userEmail": { "type": "string", "format": "email" },
+        "score": { "type": "number", "description": "Total points earned" },
+        "correctCount": { "type": "number" },
+        "totalQuestions": { "type": "number" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "userName", "score", "correctCount", "totalQuestions", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/scores/{scoreId}": {
+      "schema": "Score",
+      "description": "Global leaderboard scores"
+    }
+  }
+}

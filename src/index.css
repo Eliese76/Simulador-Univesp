@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-univesp-brand: #003366;
+  --color-univesp-light: #F8FAFC;
+  --color-univesp-border: #E2E8F0;
+  --font-sans: 'Inter', system-ui, sans-serif;
+}
+
+@layer base {
+  body {
+    @apply bg-slate-50 text-slate-900 antialiased;
+  }
+}
+
+.btn-primary {
+  @apply bg-univesp-brand text-white font-bold py-3 px-10 rounded-lg shadow-lg shadow-univesp-brand/20 transition-all hover:bg-blue-900 active:scale-95 disabled:opacity-50;
+}
+
+.option-card {
+  @apply w-full p-4 mb-3 text-left border-2 rounded-xl transition-all flex items-center gap-4;
+}
+
+.option-card-neutral {
+  @apply bg-white border-slate-200 hover:border-blue-300 hover:bg-blue-50;
+}
+
+.option-card-selected {
+  @apply bg-blue-50 border-univesp-brand shadow-sm;
+}
+
+.option-card-correct {
+  @apply bg-green-50 border-green-500 text-green-700;
+}
+
+.option-card-incorrect {
+  @apply bg-red-50 border-red-500 text-red-700;
+}
+
